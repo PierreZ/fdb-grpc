@@ -1,0 +1,62 @@
+syntax = "proto3";
+package fdb.grpc;
+
+service Gateway {
+  // Will open a transaction
+  rpc OpenTransaction(stream Request) returns (stream Response) {}
+}
+
+message Request {
+  oneof request_type {
+    ReadVersionRequest get_read_version = 1;
+    ScanRequest scan_request = 2;
+    PutRequest put_request = 3;
+    ClearRequest clear_request = 4;
+    CommitRequest commit_request = 5;
+  }
+}
+
+message ReadVersionRequest {}
+
+message ScanRequest {
+  bytes begin = 1;
+  bytes end = 2;
+}
+
+message PutRequest {
+  KeyValue key_value = 1;
+}
+
+message ClearRequest {
+  bytes begin = 1;
+  bytes end = 2;
+}
+
+message CommitRequest {}
+
+message KeyValue {
+  bytes key = 1;
+  bytes value = 2;
+
+}
+
+message Response {
+  Error error = 1;
+  oneof response_type {
+    GetReadVersionResponse get_read_version_response = 2;
+  }
+}
+
+message GetReadVersionResponse {
+  uint64 read_version = 1;
+}
+
+message ScanResponse {
+  repeated KeyValue keys_values = 1;
+}
+
+
+message Error {
+  // https://apple.github.io/foundationdb/api-error-codes.html
+  int32 error_code = 1;
+}
