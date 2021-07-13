@@ -1,0 +1,31 @@
+[package]
+name = "fdb-grpc"
+version = "0.1.0"
+edition = "2018"
+
+[[bin]] # Bin to run the FDB-gRPC server
+name = "fdb-grpc-server"
+path = "src/bin/server.rs"
+
+[[bin]] # Bin to run the FDB-gRPC client
+name = "fdb-grpc-client"
+path = "src/bin/client.rs"
+
+[dependencies]
+tonic = "0.5"
+prost = "0.8"
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+futures = { version = "0.3", default-features = false, features = ["alloc"] }
+async-stream = "0.3"
+futures-util = "0.3"
+foundationdb = "0.5.0"
+tracing = "0.1"
+tracing-subscriber = "0.2"
+tracing-log = "0.1"
+
+
+[build-dependencies]
+tonic-build = "0.5"
+
+[dev-dependencies]
+tokio-stream = "0.1"
